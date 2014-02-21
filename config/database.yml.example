@@ -18,9 +18,9 @@ development:
   adapter: postgresql
   encoding: unicode
   database: nashville-developers_development
-  pool: 5
   username: nashville-developers
-  password:
+  password: 
+  pool: 5
 
   # Connect on a TCP socket. Omitted by default since the client uses a
   # domain socket that doesn't need configuration. Windows does not have
@@ -47,9 +47,9 @@ test:
   adapter: postgresql
   encoding: unicode
   database: nashville-developers_test
-  pool: 5
   username: nashville-developers
-  password:
+  password: 
+  pool: 5
 
 production:
   adapter: postgresql

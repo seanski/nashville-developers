@@ -32,6 +32,19 @@ group :doc do
   gem 'sdoc', require: false
 end
 
+gem 'devise'
+gem 'omniauth'
+gem 'omniauth-facebook'
+gem 'omniauth-twitter'
+gem 'fb_graph'
+gem 'twitter'
+
+
+group :development, :test do
+  gem 'pry-rails'
+  gem 'pry-debugger'
+end
+
 # Use ActiveModel has_secure_password
 # gem 'bcrypt-ruby', '~> 3.1.2'
 
