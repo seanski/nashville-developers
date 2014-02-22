@@ -1,0 +1,9 @@
+development:
+  facebook:
+    app_id: 12345234324
+    secret_key: 1c3eb90223eac3243eab234bc
+
+test:
+  facebook:
+    app_id: 12345234324
+    secret_key: 1c3eb90223eac3243eab234bc
