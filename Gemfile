@@ -38,6 +38,7 @@ gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 gem 'fb_graph'
 gem 'twitter'
+gem 'cancan'
 
 
 group :development, :test do
