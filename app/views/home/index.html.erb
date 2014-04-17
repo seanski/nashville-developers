@@ -1,4 +1,9 @@
 <h1>Nashville Developers</h1>
+
+<% if flash[:message].present? %>
+  <h1><%= flash[:message] %></h1>
+<% end %>
+
 <% if current_user %>
   <h3>Hello, <%= current_user.full_name %></h3>
 <% else %>
