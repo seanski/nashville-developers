@@ -5,3 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+[:admin, :staff, :user].each do |type|
+  Role.where(name: type, active: true).first_or_create
+end
