@@ -6,6 +6,8 @@ class User < ActiveRecord::Base
          :omniauthable
 
   has_many :authorizations
+  has_many :user_roles
+  has_many :roles, through: :user_roles
 
   def full_name
     "#{first_name} #{last_name}"
@@ -29,6 +31,10 @@ class User < ActiveRecord::Base
 
   def add_authorization(provider, uid, auth_token, auth_secret = nil)
     self.authorizations.build(provider: provider, provided_id: uid, token: auth_token, secret: auth_secret)
+  end
+
+  def has_role?(role_name)
+    roles.select { |role| role.name == role_name }.any?
   end
 
   class << self
