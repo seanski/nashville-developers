@@ -12,3 +12,7 @@
   <% end %>
 <% end %>
 
+<% if can? :read, User %>
+  <%= link_to 'Users', users_path %>
+<% end %>
+
