@@ -12,6 +12,7 @@ NashvilleDevelopers::Application.routes.draw do
   # root 'welcome#index'
 
   root "home#index"
+  resources :users
   resources :roles
 
   # Example of regular route:
