@@ -12,6 +12,7 @@ NashvilleDevelopers::Application.routes.draw do
   # root 'welcome#index'
 
   root "home#index"
+  resources :roles
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
