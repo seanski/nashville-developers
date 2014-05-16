@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+# https://github.com/seanski/nashville-developers
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '4.0.3'
 
@@ -38,7 +40,7 @@ gem 'omniauth-facebook'
 gem 'omniauth-twitter'
 gem 'fb_graph'
 gem 'twitter'
-gem 'cancan'
+gem 'cancancan'
 
 
 group :development, :test do
