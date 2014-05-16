@@ -12,6 +12,10 @@
     <%= f.text_field :email %>
   </div>
   <div>
+    <%= f.label 'Skills' %><br />
+    <%= f.collection_check_boxes :skill_ids, Skill.all, :id, :name %>
+  </div>
+  <div>
     <%= f.submit %>
   </div>
 <% end %>

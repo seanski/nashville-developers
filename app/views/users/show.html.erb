@@ -1,1 +1,13 @@
+<h1><%= @user.full_name %></h1>
+
+<p>
+  Roles: <%= display_roles @user.roles %>
+</p>
+
+<p>
+  Skills: <%= display_skills @user.skills %>
+</p>
+
+<%= link_to 'Users', users_path %> | 
+<%= link_to 'Edit', edit_user_path(@user) %>
 

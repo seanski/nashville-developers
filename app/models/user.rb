@@ -8,6 +8,32 @@ class User < ActiveRecord::Base
   has_many :authorizations
   has_many :user_roles
   has_many :roles, through: :user_roles
+  has_many :user_skills
+  has_many :skills, through: :user_skills
+
+  scope :non_admin, -> { joins(:roles).where.not(roles: { name: 'admin' }) }
+  scope :admin, -> { joins(:roles).where(roles: { name: 'admin'}) }
+
+  scope :by_search, ->(term) {
+    query = %Q(
+               lower(users.first_name) LIKE :query
+               OR lower(users.last_name) LIKE :query
+               OR lower(users.email) LIKE :query
+               OR lower(roles.name) LIKE :query
+               OR lower(skills.name) LIKE :query
+              )
+    joins(:roles).joins(:skills).where(query, { query: "%#{term.downcase}%" }).uniq
+  }
+  
+  scope :roleless, -> { 
+    joins('LEFT JOIN user_roles ON user_roles.user_id = users.id')
+    .joins('LEFT JOIN roles ON roles.id = user_roles.role_id') 
+    .where(roles: { name: nil })
+  }
+
+  scope :staff, -> { joins(:roles).where('roles.name = ? OR roles.name = ?', 'staff', 'admin') }
+
+
 
   def full_name
     "#{first_name} #{last_name}"

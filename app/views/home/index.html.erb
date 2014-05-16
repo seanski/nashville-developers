@@ -12,7 +12,10 @@
   <% end %>
 <% end %>
 
-<% if can? :read, User %>
+<% if current_user and can? :read, User %>
   <%= link_to 'Users', users_path %>
 <% end %>
 
+<% if current_user and can? :read, Skill %>
+  <%= link_to 'Skills', skills_path %>
+<% end %>
