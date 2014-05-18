@@ -6,7 +6,7 @@ A directory of Nashville, TN area developers.
 
 Clone from github:
 
-`git clone https://github.com/seanski/nashville-developers.git`
+`$ git clone https://github.com/seanski/nashville-developers.git`
 
 Create the `database.yml` and `oauth.yml` files
 
@@ -16,18 +16,18 @@ Create the `database.yml` and `oauth.yml` files
 
 Configure the development database
 
-`psql`
+`$ psql`
 
-`create role 'nashville-developers' with createdb login password 'password';`
+`psql# create role 'nashville-developers' with createdb login password 'password';`
 
-`create database "nashville-developers_development" owner "nashville-developers";`
+`psql# create database "nashville-developers_development" owner "nashville-developers";`
 
-`\q`
+`psql# \q`
 
 Install your bundle
 
-`bundle install`
+`$ bundle install`
 
 Run the server
 
-`rails server`
+`$ rails server`
