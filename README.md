@@ -1,4 +1,4 @@
-#Nashville Rails Beginners Developer Directory
+#Nashville Developers Directory
 
 A directory of Nashville, TN area developers.
 
