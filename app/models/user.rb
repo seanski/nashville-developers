@@ -22,7 +22,12 @@ class User < ActiveRecord::Base
                OR lower(roles.name) LIKE :query
                OR lower(skills.name) LIKE :query
               )
-    joins(:roles).joins(:skills).where(query, { query: "%#{term.downcase}%" }).uniq
+
+    joins('LEFT JOIN user_roles ON user_roles.user_id = users.id')
+    .joins('LEFT JOIN roles ON roles.id = user_roles.role_id')
+    .joins('LEFT JOIN user_skills ON user_skills.user_id = users.id')
+    .joins('LEFT JOIN skills ON skills.id = user_skills.skill_id')
+    .where(query, { query: "%#{term.downcase}%" }).uniq
   }
   
   scope :roleless, -> { 
