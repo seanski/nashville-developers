@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable
 
+  searchkick word_start: [:skills, :roles, :first_name, :last_name, :email], suggest: [:skills]
+
   has_many :authorizations
   has_many :user_roles
   has_many :roles, through: :user_roles
@@ -38,8 +40,6 @@ class User < ActiveRecord::Base
 
   scope :staff, -> { joins(:roles).where('roles.name = ? OR roles.name = ?', 'staff', 'admin') }
 
-
-
   def full_name
     "#{first_name} #{last_name}"
   end
@@ -66,6 +66,16 @@ class User < ActiveRecord::Base
 
   def has_role?(role_name)
     roles.select { |role| role.name == role_name }.any?
+  end
+
+  def search_data
+    {
+      first_name: first_name,
+      last_name: last_name,
+      email: email,
+      skills: skills.map(&:name),
+      roles: roles.map(&:name)
+    }
   end
 
   class << self

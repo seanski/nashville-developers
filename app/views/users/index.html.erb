@@ -6,6 +6,10 @@
   <%= submit_tag 'Search' %>
 <% end %>
 
+<% if @search.suggestions.any? %>
+  <p>Did you mean <%= link_to @search.suggestions.first, users_path(q: @search.suggestions.first) %></p>
+<% end %>
+
 <table>
   <thead>
     <tr>

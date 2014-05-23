@@ -2,8 +2,9 @@ class UsersController < AuthenticatedController
   load_and_authorize_resource
   
   def index
-    if q = params[:q]
-      @users = @users.by_search(q) 
+    if q = params[:q]      
+      @search = User.search(q, misspellings: {distance: 4}, suggest: true)
+      @users = @users.where(id: @search.map(&:id))
     end    
         
     respond_with @users
