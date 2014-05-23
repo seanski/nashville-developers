@@ -41,6 +41,7 @@ gem 'omniauth-twitter'
 gem 'fb_graph'
 gem 'twitter'
 gem 'cancancan'
+gem 'searchkick'
 
 
 group :development, :test do
