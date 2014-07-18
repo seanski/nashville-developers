@@ -42,6 +42,7 @@ gem 'fb_graph'
 gem 'twitter'
 gem 'cancancan'
 gem 'searchkick'
+gem 'bootstrap-sass', '~> 3.1.1'
 
 
 group :development, :test do

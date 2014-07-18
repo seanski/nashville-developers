@@ -6,35 +6,38 @@
   <%= submit_tag 'Search' %>
 <% end %>
 
-<% if @search.suggestions.any? %>
+<% if @search and @search.suggestions.any? %>
   <p>Did you mean <%= link_to @search.suggestions.first, users_path(q: @search.suggestions.first) %></p>
 <% end %>
-
-<table>
-  <thead>
-    <tr>
-      <th>First Name</th>
-      <th>Last Name</th>
-      <th>Email</th>
-      <th>Roles</th>
-      <th>Skills</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @users.each do |user| %>
+<!-- <div class="table-responsive"> -->
+  <table class="table table-striped">
+    <thead>
       <tr>
-        <td><%= user.first_name %></td>
-        <td><%= user.last_name %></td>
-        <td><%= user.email %></td>
-        <td><%= display_roles user.roles %></td>
-        <td><%= display_skills user.skills %></td>
-        <td>
-          <%= link_to 'Show', user_path(user) %> |
-          <%= link_to 'Edit', edit_user_path(user) %> |
-          <%= link_to 'Destroy', user_path(user), method: :delete, data: {confirm: 'Are you sure?'} %>
-        </td>
+        <th class="hidden-xs">First Name</th>
+        <th class="hidden-xs">Last Name</th>
+        <th class="visible-xs">Full Name</th>
+        <th>Email</th>
+        <th class="hidden-xs">Roles</th>
+        <th class="hidden-xs">Skills</th>
+        <th></th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td class="hidden-xs"><%= user.first_name %></td>
+          <td class="hidden-xs"><%= user.last_name %></td>
+          <td class="visible-xs"><%= user.full_name %></td>
+          <td><%= user.email %></td>
+          <td class="hidden-xs"><%= display_roles user.roles %></td>
+          <td class="hidden-xs"><%= display_skills user.skills %></td>
+          <td>
+            <%= link_to 'Show', user_path(user) %> |
+            <%= link_to 'Edit', edit_user_path(user) %> |
+            <%= link_to 'Destroy', user_path(user), method: :delete, data: {confirm: 'Are you sure?'} %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<!-- </div> -->
