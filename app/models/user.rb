@@ -93,6 +93,12 @@ class User < ActiveRecord::Base
       end
 
       unless user
+        if user = User.where(email: auth.info.email).first
+          user.add_authorization_for_facebook(auth.uid, auth.credentials.try(:token))
+        end
+      end
+
+      unless user
         user = User.create(first_name: auth.extra.raw_info.first_name,
                            last_name: auth.extra.raw_info.last_name,
                            email: auth.info.email,
