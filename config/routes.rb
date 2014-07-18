@@ -15,6 +15,7 @@ NashvilleDevelopers::Application.routes.draw do
   resources :users
   resources :roles
   resources :skills
+  resource :profile, controller: :profile, only: [:edit, :update]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
