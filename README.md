@@ -14,6 +14,12 @@ Create the `database.yml` and `oauth.yml` files
   * You must create twitter and facebook apps and obtain the API keys from there
   * App uses Postgres DB by default, see installation docs for your platform
 
+##Create a new facebook app:
+Go to developers.facebook.com
+Create a new app
+For development, point app to localhost:3000
+Put the facebook key you get in the oauth.yml file.
+
 Install your bundle
 
 `bundle install`
