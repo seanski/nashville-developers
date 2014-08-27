@@ -1,9 +1,15 @@
 development:
   facebook:
-    app_id: 12345234324
-    secret_key: 1c3eb90223eac3243eab234bc
+    app_id: 1433211373566094
+    secret_key: deab7abaabc4ce1284def42c74d5fb70
+  linkedin:
+    app_id:  759mka9wle8u74
+    secret_key: HKPrr9G7llkk4maD
 
 test:
   facebook:
-    app_id: 12345234324
-    secret_key: 1c3eb90223eac3243eab234bc
+    app_id: 11433211373566094
+    secret_key: deab7abaabc4ce1284def42c74d5fb70
+  linkedin:
+    app_id:  759mka9wle8u74
+    secret_key: HKPrr9G7llkk4maD

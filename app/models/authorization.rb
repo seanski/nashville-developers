@@ -3,6 +3,7 @@ class Authorization < ActiveRecord::Base
 
   scope :facebook, -> { where(provider: :facebook) }
   scope :twitter, -> { where(provider: :twitter) }
+  scope :linkedin, -> { where(provider: :linkedin) }
   scope :with_user, -> { includes(:user) }
   scope :for_user, ->(user) { where(user_id: user) }
   scope :for_uid, ->(provided_id) { where(provided_id: provided_id) }
@@ -17,12 +18,20 @@ class Authorization < ActiveRecord::Base
       twitter.with_user.for_uid(external_id).first
     end
 
+    def get_linkedin_user(external_id)
+      linkedin.with_user.for_uid(external_id).first
+    end
+
     def get_facebook_token_for_user(user)
       facebook.for_user(user).first.try(:token)
     end
 
     def get_twitter_token_for_user(user)
       twitter.for_user(user).first.try(:token)
+    end
+
+    def get_linkedin_token_for_user(user)
+      linkedin.for_user(user).first.try(:token)
     end
   end
 end
