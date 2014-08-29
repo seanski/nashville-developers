@@ -31,10 +31,10 @@ class User < ActiveRecord::Base
     .joins('LEFT JOIN skills ON skills.id = user_skills.skill_id')
     .where(query, { query: "%#{term.downcase}%" }).uniq
   }
-  
-  scope :roleless, -> { 
+
+  scope :roleless, -> {
     joins('LEFT JOIN user_roles ON user_roles.user_id = users.id')
-    .joins('LEFT JOIN roles ON roles.id = user_roles.role_id') 
+    .joins('LEFT JOIN roles ON roles.id = user_roles.role_id')
     .where(roles: { name: nil })
   }
 
@@ -56,8 +56,8 @@ class User < ActiveRecord::Base
     add_authorization(:facebook, uid, auth_token)
   end
 
-  def add_authorization_for_twitter(uid, auth_token, auth_secret)
-    add_authorization(:twitter, uid, auth_token, auth_secret)
+  def add_authorization_for_twitter(uid, auth_token)
+    add_authorization(:twitter, uid, auth_token)
   end
 
   def add_authorization(provider, uid, auth_token, auth_secret = nil)
@@ -105,6 +105,37 @@ class User < ActiveRecord::Base
                            password: Devise.friendly_token[0,20])
 
         user.add_authorization_for_facebook(auth.uid, auth.credentials.try(:token))
+      end
+      user
+    end
+  end
+
+
+  class << self
+    def find_or_create_by_twitter_oauth(auth, signed_in_resource = nil)
+      authorization = Authorization.get_twitter_user(auth.uid)
+      user = authorization.try(:user)
+      if signed_in_resource
+        unless signed_in_resource == user
+          signed_in_resource.add_authorization_for_twitter(auth.uid, auth.credentials.try(:token))
+          signed_in_resource.save
+        end
+        return signed_in_resource
+      end
+
+      unless user
+        if user = User.where(email: auth.info.email).first
+          user.add_authorization_for_twitter(auth.uid, auth.credentials.try(:token))
+        end
+      end
+      unless user
+        names = auth.info.name.split(" ")
+        user = User.create(first_name: names[0],
+                           last_name: names[1],
+                           email: "random#{rand(5000)}@random.com",
+                           password: Devise.friendly_token[0,20])
+
+        user.add_authorization_for_twitter(auth.uid, auth.credentials.try(:token))
       end
       user
     end
