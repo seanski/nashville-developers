@@ -1,12 +1,12 @@
 class UsersController < AuthenticatedController
   load_and_authorize_resource
-
+  
   def index
-    if q = params[:q]
+    if q = params[:q]      
       @search = User.search(q, misspellings: {distance: 4}, suggest: true)
       @users = @users.where(id: @search.map(&:id))
-    end
-
+    end    
+        
     respond_with @users
   end
 
@@ -15,7 +15,7 @@ class UsersController < AuthenticatedController
   end
 
   def new
-    @user = User.new
+  
   end
 
   def create
@@ -34,7 +34,7 @@ class UsersController < AuthenticatedController
   def destroy
     @user.destroy
     respond_with @user
-  end
+  end  
 
   private
 

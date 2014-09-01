@@ -9,9 +9,6 @@
 <% else %>
   <%= link_to user_omniauth_authorize_path(provider: :facebook) do %>
     <%= image_tag 'facebook-login.png' %>
-    <% end %>
-  <%= link_to user_omniauth_authorize_path(provider: :twitter) do %>
-    <%= image_tag 'twitter-login.png' %>
   <% end %>
 <% end %>
 
