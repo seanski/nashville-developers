@@ -254,4 +254,5 @@ Devise.setup do |config|
 
   config.omniauth :facebook, OAuth::Facebook.app_id, OAuth::Facebook.secret, scope: 'email,offline_access'
   config.omniauth :twitter, OAuth::Twitter.app_id, OAuth::Twitter.secret
+  config.omniauth :linkedin, OAuth::Linkedin.app_id, OAuth::Linkedin.secret
 end

@@ -31,10 +31,10 @@ class User < ActiveRecord::Base
     .joins('LEFT JOIN skills ON skills.id = user_skills.skill_id')
     .where(query, { query: "%#{term.downcase}%" }).uniq
   }
-  
-  scope :roleless, -> { 
+
+  scope :roleless, -> {
     joins('LEFT JOIN user_roles ON user_roles.user_id = users.id')
-    .joins('LEFT JOIN roles ON roles.id = user_roles.role_id') 
+    .joins('LEFT JOIN roles ON roles.id = user_roles.role_id')
     .where(roles: { name: nil })
   }
 
@@ -52,12 +52,20 @@ class User < ActiveRecord::Base
     @twitter_token ||= self.authorizations.get_twitter_token_for_user(self)
   end
 
+  def linkedin_token
+    @linkedin_token ||= self.authorizations.get_linkedin_token_for_user(self)
+  end
+
   def add_authorization_for_facebook(uid, auth_token)
     add_authorization(:facebook, uid, auth_token)
   end
 
   def add_authorization_for_twitter(uid, auth_token, auth_secret)
     add_authorization(:twitter, uid, auth_token, auth_secret)
+  end
+
+  def add_authorization_for_linkedin(uid, auth_token)
+    add_authorization(:linkedin, uid, auth_token)
   end
 
   def add_authorization(provider, uid, auth_token, auth_secret = nil)
@@ -105,6 +113,38 @@ class User < ActiveRecord::Base
                            password: Devise.friendly_token[0,20])
 
         user.add_authorization_for_facebook(auth.uid, auth.credentials.try(:token))
+      end
+      user
+    end
+  end
+
+  class << self
+    def find_or_create_by_linkedin_oauth(auth, signed_in_resource = nil)
+      authorization = Authorization.get_linkedin_user(auth.uid)
+      user = authorization.try(:user)
+
+      if signed_in_resource
+        unless signed_in_resource == user
+          signed_in_resource.add_authorization_for_linkedin(auth.uid, auth.credentials.try(:token))
+          signed_in_resource.save
+        end
+
+        return signed_in_resource
+      end
+
+      unless user
+        if user = User.where(email: auth.info.email).first
+          user.add_authorization_for_linkedin(auth.uid, auth.credentials.try(:token))
+        end
+      end
+
+      unless user
+        user = User.create(first_name: auth.extra.raw_info.first_name,
+                           last_name: auth.extra.raw_info.last_name,
+                           email: auth.info.email,
+                           password: Devise.friendly_token[0,20])
+
+        user.add_authorization_for_linkedin(auth.uid, auth.credentials.try(:token))
       end
       user
     end

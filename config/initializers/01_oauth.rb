@@ -25,4 +25,17 @@ module OAuth
       self.secret = "NOT SET!"
     end
   end
+
+  module Linkedin
+    mattr_accessor :config, :app_id, :secret
+    begin
+      self.config = OAUTH_YAML["linkedin"]
+      self.app_id = self.config['app_id']
+      self.secret = self.config['secret_key']
+    rescue Exception => e
+      self.config = "NOT SET!"
+      self.app_id = "NOT SET!"
+      self.secret = "NOT SET!"
+    end
+  end
 end

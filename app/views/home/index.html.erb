@@ -10,6 +10,9 @@
   <%= link_to user_omniauth_authorize_path(provider: :facebook) do %>
     <%= image_tag 'facebook-login.png' %>
   <% end %>
+  <%= link_to user_omniauth_authorize_path(provider: :linkedin) do %>
+    <%= image_tag 'sign-in-linkedin.png' %>
+  <% end %>
 <% end %>
 
 <% if current_user and can? :read, User %>
