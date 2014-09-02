@@ -60,8 +60,8 @@ class User < ActiveRecord::Base
     add_authorization(:facebook, uid, auth_token)
   end
 
-  def add_authorization_for_twitter(uid, auth_token)
-    add_authorization(:twitter, uid, auth_token)
+  def add_authorization_for_twitter(uid, auth_token, auth_secret)
+    add_authorization(:twitter, uid, auth_token, auth_secret)
   end
 
   def add_authorization_for_linkedin(uid, auth_token)
