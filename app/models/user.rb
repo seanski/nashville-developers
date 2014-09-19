@@ -88,73 +88,47 @@ class User < ActiveRecord::Base
 
   class << self
     def find_or_create_by_facebook_oauth(auth, signed_in_resource = nil)
-      authorization = Authorization.get_facebook_user(auth.uid)
-      user = authorization.try(:user)
-
-      if signed_in_resource
-        unless signed_in_resource == user
-          signed_in_resource.add_authorization_for_facebook(auth.uid, auth.credentials.try(:token))
-          signed_in_resource.save
-        end
-
-        return signed_in_resource
+      find_or_create_by_oauth(:facebook, auth, signed_in_resource) do |auth|
+        {
+          first_name: auth.extra.raw_info.first_name,
+          last_name: auth.extra.raw_info.last_name,
+          email: auth.info.email
+        }
       end
-
-      unless user
-        if user = User.where(email: auth.info.email).first
-          user.add_authorization_for_facebook(auth.uid, auth.credentials.try(:token))
-        end
-      end
-
-      unless user
-        user = User.create(first_name: auth.extra.raw_info.first_name,
-                           last_name: auth.extra.raw_info.last_name,
-                           email: auth.info.email,
-                           password: Devise.friendly_token[0,20])
-
-        user.add_authorization_for_facebook(auth.uid, auth.credentials.try(:token))
-      end
-      user
     end
 
     def find_or_create_by_linkedin_oauth(auth, signed_in_resource = nil)
-      authorization = Authorization.get_linkedin_user(auth.uid)
-      user = authorization.try(:user)
-
-      if signed_in_resource
-        unless signed_in_resource == user
-          signed_in_resource.add_authorization_for_linkedin(auth.uid, auth.credentials.try(:token))
-          signed_in_resource.save
-        end
-
-        return signed_in_resource
+      find_or_create_by_oauth(:linkedin, auth, signed_in_resource) do |auth|
+        {
+          first_name: auth.extra.raw_info.first_name,
+          last_name: auth.extra.raw_info.last_name,
+          email: auth.info.email
+        }
       end
-
-      unless user
-        if user = User.where(email: auth.info.email).first
-          user.add_authorization_for_linkedin(auth.uid, auth.credentials.try(:token))
-        end
-      end
-
-      unless user
-        user = User.create(first_name: auth.extra.raw_info.first_name,
-                           last_name: auth.extra.raw_info.last_name,
-                           email: auth.info.email,
-                           password: Devise.friendly_token[0,20])
-
-        user.add_authorization_for_linkedin(auth.uid, auth.credentials.try(:token))
-      end
-      user
     end
 
 
     def find_or_create_by_twitter_oauth(auth, signed_in_resource = nil)
-      authorization = Authorization.get_twitter_user(auth.uid)
+      find_or_create_by_oauth(:twitter, auth, signed_in_resource) do |auth|
+        first_name, last_name = auth.info.name.split(" ")
+
+        { 
+          first_name: first_name,
+          last_name: last_name,
+          email: "random#{rand(5000)}@random.com"
+        }
+      end
+    end
+
+    protected
+
+    def find_or_create_by_oauth(provider, auth, signed_in_resource = nil, &block)
+      authorization = Authorization.get_user(provider, auth.uid)
       user = authorization.try(:user)
 
       if signed_in_resource
         unless signed_in_resource == user
-          signed_in_resource.add_authorization_for_twitter(auth.uid, auth.credentials.try(:token))
+          signed_in_resource.add_authorization(provider, auth.uid, auth.credentials.try(:token))
           signed_in_resource.save
         end
 
@@ -163,21 +137,19 @@ class User < ActiveRecord::Base
 
       unless user
         if user = User.where(email: auth.info.email).first
-          user.add_authorization_for_twitter(auth.uid, auth.credentials.try(:token))
+          user.add_authorization(provider, auth.uid, auth.credentials.try(:token))
         end
       end
 
       unless user
-        names = auth.info.name.split(" ")
-        user = User.create(first_name: names[0],
-                           last_name: names[1],
-                           email: "random#{rand(5000)}@random.com",
-                           password: Devise.friendly_token[0,20])
+        params = block.call(auth)
+        params.merge! password: Devise.friendly_token[0, 20]
+        user = User.create(params)
 
-        user.add_authorization_for_twitter(auth.uid, auth.credentials.try(:token))
+        user.add_authorization(provider, auth.uid, auth.credentials.try(:token))
       end
+      
       user
-    end
+    end    
   end
-
 end
