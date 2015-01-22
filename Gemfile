@@ -48,7 +48,10 @@ gem 'bootstrap-sass', '~> 3.1.1'
 
 group :development, :test do
   gem 'pry-rails'
-  gem 'pry-debugger'
+  gem 'pry-byebug'
+  gem 'rspec-rails', '~> 3.0.0'
+  gem 'shoulda-matchers'
+  gem 'fabrication'
 end
 
 # Use ActiveModel has_secure_password
